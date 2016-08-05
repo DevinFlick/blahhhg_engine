@@ -3,11 +3,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var commentSchema = new Schema({
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
+  // author: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: 'User'
+  // },
+  author: String,
+
   body: {
     type: String,
     required: true
@@ -26,5 +28,10 @@ var commentSchema = new Schema({
     ref: 'Post'
   }
 });
+
+commentSchema.pre('findOneAndUpdate', function(){
+  this.update({},{ $set: { updated: new Date() } });
+});
+
 var Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;
