@@ -64,7 +64,7 @@ function createComment(req, res, next){
   });
 }
 function deleteComment(req, res, next){
-  Comment.findOneAndRemove({_id: req.params.id}, function(err, deletedComment){
+  Comment.findOneAndRemove({_id: req.params.commentId}, function(err, deletedComment){
     if(err){
       res.status(500).json({
         msg: err
@@ -77,16 +77,16 @@ function deleteComment(req, res, next){
   });
 }
 function updateComment(req, res, next){
-  Comment.findOneAndUpdate({_id: req.params.id},
+  Comment.findOneAndUpdate({_id: req.params.commentId},
     req.body,
-    function(err, post){
+    function(err, comment){
         if(err){
           res.status(500).json({
             msg: err
           });
         } else {
           res.status(200).json({
-            post: post
+            comment: comment
           });
         }
     })
