@@ -26,7 +26,9 @@ function signup(req, res){
     });
 }
 function login(req, res){
+  console.log('before auth');
   passport.authenticate('local', function(err, user, info){
+    console.log('inside auth');
     if(err){
       return res.status(500).json({
         msg: 'authentication failed'
@@ -42,5 +44,7 @@ function login(req, res){
       return res.status(401).json(info);
     }
 
-  });
+  })(req, res);
+  console.log('after auth');
+
 }
