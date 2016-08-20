@@ -52,7 +52,7 @@ userSchema.methods.generateJwt = function(){
     email: this.email,
     firstName: this.firstName,
     lastName: this.lastName,
-    exp: parseInt(expiration.getDate() / 1000)
+    exp: parseInt(expiration.getDate())
   }, secret);
 }
 
