@@ -2,8 +2,11 @@
 var express = require('express');
 var router = express.Router();
 var Post = require('../models/post.js');
+var _ = require('lodash');
 
 router.get('/posts', getAllPosts);
+router.get('/posts/random/:number', getRandomNumberOfPosts);
+router.get('/posts/recent/:number', getTheMostRecentNumberOfPosts);
 router.post('/posts', createPost);
 router.get('/posts/:id', getPostById);
 router.delete('/posts/:id', deletePost);
@@ -84,4 +87,36 @@ function updatePost(req, res, next){
         });
       }
     });
+}
+function getTheMostRecentNumberOfPosts(req, res, next){
+  Post.find({}, function(err, posts){
+    if(err){
+      res.status(500).json({
+        msg: err
+      });
+    } else {
+      var numberOfPostsToGet = req.params.number;
+      var postsOrderedByDate = _.orderBy(posts, ['created'], ['asc']);
+      var firstNumberOfOrderedPosts = _.take(postsOrderedByDate, numberOfPostsToGet);
+      res.status(200).json({
+        posts: firstNumberOfOrderedPosts
+      });
+    }
+  });
+}
+function getRandomNumberOfPosts(req, res, next){
+  Post.find({}, function(err, posts){
+    if(err){
+      res.status(500).json({
+        msg: err
+      });
+    } else {
+      var numOfPostsToGet = req.params.number;
+      var randomizedPosts = _.shuffle(posts);
+      var firstNumberOfRandomizedPosts = _.take(randomizedPosts, numOfPostsToGet);
+      res.status(200).json({
+        posts: firstNumberOfRandomizedPosts
+      });
+    }
+  });
 }
